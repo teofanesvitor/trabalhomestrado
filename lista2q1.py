@@ -1,6 +1,6 @@
 # -*- uft-8 -*-
 
-from numpy import random, exp, sqrt, pi
+from numpy import random, exp, sqrt, pi, ln
 from scipy import integrate
 
 #Média e desvio padrão das variabeis aleatórios
@@ -25,13 +25,15 @@ m = random.normal(m_med, m_dev, n)
 
 #Variáveis aleatórias do tipo Lognormal
 
+Y1_ksi = sqrt(ln(1+(Y1_dev/Y1_med)**2))
+Y1_lambda = ln(Y1_med) - 1/2*Y1_ksi**2
 
-Y1 = random.lognormal(Y1_med, Y1_dev, n)
-Y2 = random.lognormal(Y2_med, Y2_dev, n)
-C1 = random.lognormal(C1_med, C1_dev, n)
+Y2_ksi = sqrt(ln(1+(Y2_dev/Y2_med)**2))
+Y2_lambda = ln(Y2_med) - 1/2*Y2_ksi**2
 
-f = []
-for i in range(n):
-    ff = integrate.fixed_quad(a, a[i], ac, 1/(exp(Y1[i]*(a[i]/50)**Y2[i])*sqrt(2*pi))**m[i], )
+C1_ksi = sqrt(ln(1+(Y1_dev/C1_med)**2))
+C1_lambda = ln(C1_med) - 1/2*C1_ksi**2
 
-    f.append(ff)
+Y1 = random.lognormal(Y1_ksi, Y1_lambda, n)
+Y2 = random.lognormal(Y2_ksi, Y2_lambda, n)
+C1 = random.lognormal(C1_ksi, C1_lambda, n)
